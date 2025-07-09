@@ -2,6 +2,7 @@ package basic.service;
 
 import basic.dto.MemberDto;
 import basic.entity.Member;
+import basic.enumerate.UserRoleType;
 import basic.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,8 @@ public class MemberService {
     // 회원가입
     @Transactional
     public Long join(MemberDto memberDto) {
-        validateDuplicateMember(memberDto);
-        Member member = Member.of(memberDto.getUsername(), memberDto.getPassword());
+        //validateDuplicateMember(memberDto);
+        Member member = Member.of(memberDto.getUsername(), memberDto.getPassword(), UserRoleType.USER);
         memberRepository.save(member);
         return member.getId();
     }

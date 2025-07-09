@@ -23,27 +23,27 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.disable());
 
-//		http.authorizeHttpRequests(authorize -> authorize
-//				.requestMatchers("/", "/api/auth/").permitAll()
-//				.requestMatchers("/api/auth/user/**").hasAnyRole("USER", "MANAGER", "ADMIN") // 유저, 매니져, 어드민 접근가능한 user
-//				.requestMatchers("/api/auth/manager/**").hasAnyRole("MANAGER", "ADMIN")// admin,매니져만 접근가능한
-//				.requestMatchers("/api/auth/admin/**").hasAnyRole("ADMIN") // admin만 접근가능한 페이지
-//				.anyRequest().permitAll())
-//				.exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler()) // 403 처리
-//				);
+		http.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/", "/member/**", "/login").permitAll()
+				.requestMatchers("/item/**").hasAnyRole("USER", "MANAGER", "ADMIN") // 유저, 매니져, 어드민 접근가능한 user
+				//.requestMatchers("/api/auth/manager/**").hasAnyRole("MANAGER", "ADMIN")// admin,매니져만 접근가능한
+				//.requestMatchers("/api/auth/admin/**").hasAnyRole("ADMIN") // admin만 접근가능한 페이지
+				.anyRequest().permitAll())
+				.exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler()) // 403 처리
+				);
 
-		http.authorizeHttpRequests(
-				authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup")
-						.permitAll().requestMatchers("/", "/api/auth/").permitAll().anyRequest().authenticated());
+//		http.authorizeHttpRequests(
+//				authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/auth/signup")
+//						.permitAll().requestMatchers("/", "/api/auth/").permitAll().anyRequest().authenticated());
 
-//		http.formLogin(form -> form.loginPage("/api/auth/login") 														
-//				.loginProcessingUrl("/api/auth/login") 														
-//				.defaultSuccessUrl("/api/questions?page=1&size=10", true)); 
+		http.formLogin(form -> form.loginPage("/login") 														
+				.loginProcessingUrl("/login") 														
+				.defaultSuccessUrl("/home", true)); 
 
 		http.formLogin(login -> login.disable());
 
-		http.logout(logout -> logout.logoutUrl("/api/auth/logout") // 로그아웃 요청을 보낼 URL (프론트에서 이 경로로 POST 요청)
-				.logoutSuccessUrl("/api/auth/login") // 로그아웃 성공 후 이동할 URL
+		http.logout(logout -> logout.logoutUrl("/logout") // 로그아웃 요청을 보낼 URL (프론트에서 이 경로로 POST 요청)
+				.logoutSuccessUrl("/login") // 로그아웃 성공 후 이동할 URL
 				.invalidateHttpSession(true) // 세션 무효화
 				.deleteCookies("JSESSIONID") // 쿠키 삭제
 		);
