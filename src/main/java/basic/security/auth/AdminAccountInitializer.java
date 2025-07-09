@@ -7,37 +7,37 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import basic.dto.UserDTO;
-import basic.entity.User;
 import basic.enumerate.UserRoleType;
-import basic.repository.UserRepository;
+import basic.dto.MemberDto;
+import basic.entity.Member;
+import basic.repository.MemberRepository;
 
 @Component
 public class AdminAccountInitializer implements ApplicationListener<ApplicationReadyEvent> {
 
-	  private final UserRepository userRepository;
+		private final MemberRepository memberRepository;
 	    private final PasswordEncoder passwordEncoder;
 
-	    public AdminAccountInitializer(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-	        this.userRepository = userRepository;
+	    public AdminAccountInitializer(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+	        this.memberRepository = memberRepository;
 	        this.passwordEncoder = passwordEncoder;
 	    }
 
 	    @Override
 	    public void onApplicationEvent(ApplicationReadyEvent event) {
-	        if (userRepository.findByUsername("admin") == null) {
+	        if (!memberRepository.findByUsername("admin").isPresent()) {
 	        	
 	            // 관리자 DTO 생성, 비밀번호는 암호화 적용
-	            UserDTO adminDto = new UserDTO("admin", passwordEncoder.encode("adminpassword"), UserRoleType.ADMIN);
+	        	MemberDto adminDto = new MemberDto("admin", passwordEncoder.encode("admin"), UserRoleType.ADMIN);
 
 	            // DTO → Entity 변환
-	            User admin = adminDto.toEntity();
+	            Member admin = adminDto.toEntity();
 
 	            // 저장
-	            userRepository.save(admin);
+	            memberRepository.save(admin);
 	        }
-	        	UserDTO userDto = new UserDTO("test123", passwordEncoder.encode("test123!"), UserRoleType.USER);
-	        	User admin = userDto.toEntity();
-	        	userRepository.save(admin);
+	        	MemberDto userDto = new MemberDto("test123", passwordEncoder.encode("test123"), UserRoleType.USER);
+	        	Member admin = userDto.toEntity();
+	        	memberRepository.save(admin);
 	    }
 }

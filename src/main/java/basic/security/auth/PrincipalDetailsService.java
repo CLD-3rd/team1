@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import basic.entity.User;
-import basic.repository.UserRepository;
+import basic.entity.Member;
+import basic.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 
 
@@ -14,15 +14,15 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class PrincipalDetailsService implements UserDetailsService { 
 
-private final UserRepository userRepository;
+private final MemberRepository memberRepository;
 
 @Override
 public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-User user= userRepository.findByUsername(username);
+Member member= memberRepository.findByUsername(username).get();
 
-if (user!= null) {
-return new PrincipalDetails(user); 
+if (member!= null) {
+return new PrincipalDetails(member); 
 }
 
 return null;

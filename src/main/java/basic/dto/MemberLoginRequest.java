@@ -1,4 +1,4 @@
-package basic.request;
+package basic.dto;
 
 
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class UserLoginRequestDTO {
+public class MemberLoginRequest {
 
     private String username;
     private String password;

@@ -1,6 +1,6 @@
-package basic.request;
+package basic.dto;
 
-import basic.entity.User;
+import basic.entity.Member;
 import basic.enumerate.UserRoleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +9,13 @@ import lombok.ToString;
 @Getter
 @Setter
 
-public class UserSignupRequestDTO {
+public class MemberSignupRequest {
 
     private String username;
     private String password;
 
-    public User toEntity() {
-        return User.of(
+    public Member toEntity() {
+        return Member.of(
             username,
             password,
             UserRoleType.USER
